@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FLAMES Love Calculator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Comic Sans MS', cursive, sans-serif;
+            background: linear-gradient(135deg, #ff6b6b, #ff8e8e, #ffa8a8);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+            text-align: center;
+            max-width: 500px;
+            width: 100%;
+            border: 2px solid rgba(255, 182, 193, 0.5);
+        }
+        
+        .title {
+            color: #e91e63;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+        
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .flames-letters {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+        
+        .flame-letter {
+            background: linear-gradient(45deg, #ff4757, #ff6b7a);
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 1.2em;
+            box-shadow: 0 4px 15px rgba(255, 71, 87, 0.3);
+            animation: pulse 2s infinite alternate;
+        }
+        
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            100% { transform: scale(1.05); }
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+        }
+        
+        .input-group label {
+            display: block;
+            color: #333;
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 1.1em;
+        }
+        
+        .input-group input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #ff6b7a;
+            border-radius: 25px;
+            font-size: 1.1em;
+            text-align: center;
+            outline: none;
+            transition: all 0.3s ease;
+            background: rgba(255, 255, 255, 0.8);
+        }
+        
+        .input-group input:focus {
+            border-color: #e91e63;
+            box-shadow: 0 0 10px rgba(233, 30, 99, 0.3);
+            transform: translateY(-2px);
+        }
+        
+        .calculate-btn {
+            background: linear-gradient(45deg, #e91e63, #f06292);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            border-radius: 25px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(233, 30, 99, 0.3);
+            margin: 20px 0;
+        }
+        
+        .calculate-btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 25px rgba(233, 30, 99, 0.4);
+        }
+        
+        .calculate-btn:active {
+            transform: translateY(0);
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background: linear-gradient(135deg, #ffeaa7, #fdcb6e);
+            border-radius: 15px;
+            border-left: 5px solid #e17055;
+            display: none;
+        }
+        
+        .result.show {
+            display: block;
+            animation: slideIn 0.5s ease;
+        }
+        
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .result h3 {
+            color: #d63031;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+        
+        .percentage {
+            font-size: 3em;
+            font-weight: bold;
+            color: #e17055;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            margin: 10px 0;
+        }
+        
+        .relationship-type {
+            font-size: 1.3em;
+            color: #2d3436;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #636e72;
+            font-style: italic;
+            line-height: 1.4;
+        }
+        
+        .steps {
+            margin-top: 20px;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.7);
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9em;
+            color: #666;
+        }
+        
+        .heart {
+            color: #e91e63;
+            animation: heartbeat 1.5s ease-in-out infinite;
+        }
+        
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="title">F.L.A.M.E.S <span class="heart">♥</span></h1>
+        <p class="subtitle">Friends • Love • Affection • Marriage • Enemies • Siblings</p>
+        
+        <div class="flames-letters">
+            <div class="flame-letter">F</div>
+            <div class="flame-letter">L</div>
+            <div class="flame-letter">A</div>
+            <div class="flame-letter">M</div>
+            <div class="flame-letter">E</div>
+            <div class="flame-letter">S</div>
+        </div>
+        
+        <div class="input-group">
+            <label for="name1">First Person's Name:</label>
+            <input type="text" id="name1" placeholder="Enter first name" maxlength="20">
+        </div>
+        
+        <div class="input-group">
+            <label for="name2">Second Person's Name:</label>
+            <input type="text" id="name2" placeholder="Enter second name" maxlength="20">
+        </div>
+        
+        <button class="calculate-btn" onclick="calculateFlames()">
+            Calculate FLAMES! <span class="heart">♥</span>
+        </button>
+        
+        <div class="result" id="result">
+            <h3>Your FLAMES Result:</h3>
+            <div class="percentage" id="percentage"></div>
+            <div class="relationship-type" id="relationshipType"></div>
+            <div class="description" id="description"></div>
+            <div class="steps" id="steps"></div>
+        </div>
+    </div>
+
+    <script>
+        function calculateFlames() {
+            const name1 = document.getElementById('name1').value.trim().toLowerCase();
+            const name2 = document.getElementById('name2').value.trim().toLowerCase();
+            
+            if (!name1 || !name2) {
+                alert('Please enter both names!');
+                return;
+            }
+            
+            // Remove spaces and convert to arrays
+            const chars1 = name1.replace(/\s+/g, '').split('');
+            const chars2 = name2.replace(/\s+/g, '').split('');
+            
+            // Create copies for processing
+            let processChars1 = [...chars1];
+            let processChars2 = [...chars2];
+            
+            // Remove common characters
+            let commonCount = 0;
+            for (let i = 0; i < processChars1.length; i++) {
+                for (let j = 0; j < processChars2.length; j++) {
+                    if (processChars1[i] === processChars2[j]) {
+                        commonCount += 2; // Count both occurrences
+                        processChars1.splice(i, 1);
+                        processChars2.splice(j, 1);
+                        i--; // Adjust index after removal
+                        break;
+                    }
+                }
+            }
+            
+            // Count remaining characters
+            const remainingCount = processChars1.length + processChars2.length;
+            
+            // FLAMES array
+            const flames = ['Friends', 'Love', 'Affection', 'Marriage', 'Enemies', 'Siblings'];
+            
+            if (remainingCount === 0) {
+                // If no remaining characters, default to Love
+                showResult(flames[1], 100, name1, name2, remainingCount, commonCount);
+                return;
+            }
+            
+            // Calculate FLAMES result using the remaining count
+            const resultIndex = (remainingCount - 1) % 6;
+            const relationship = flames[resultIndex];
+            
+            // Calculate a fun percentage based on various factors
+            let percentage;
+            if (relationship === 'Love' || relationship === 'Marriage') {
+                percentage = Math.max(75, 100 - (remainingCount * 3));
+            } else if (relationship === 'Affection' || relationship === 'Friends') {
+                percentage = Math.max(60, 85 - (remainingCount * 2));
+            } else if (relationship === 'Siblings') {
+                percentage = Math.max(70, 90 - remainingCount);
+            } else { // Enemies
+                percentage = Math.max(10, 40 - remainingCount);
+            }
+            
+            percentage = Math.min(100, Math.max(10, percentage));
+            
+            showResult(relationship, percentage, name1, name2, remainingCount, commonCount);
+        }
+        
+        function showResult(relationship, percentage, name1, name2, remainingCount, commonCount) {
+            const descriptions = {
+                'Friends': 'You two are destined to be great friends! Your bond will be strong and lasting.',
+                'Love': 'Love is in the air! You two are meant for each other with a beautiful romantic connection.',
+                'Affection': 'There\'s a sweet affection between you two. You care deeply for each other.',
+                'Marriage': 'Wedding bells are ringing! You two are perfect marriage material.',
+                'Enemies': 'Opposites attract, but maybe not in this case. You might face some challenges!',
+                'Siblings': 'You two have a sibling-like bond - caring but with occasional friendly conflicts!'
+            };
+            
+            document.getElementById('percentage').textContent = percentage + '%';
+            document.getElementById('relationshipType').textContent = relationship.toUpperCase();
+            document.getElementById('description').textContent = descriptions[relationship];
+            
+            // Show calculation steps
+            const steps = `
+                <strong>How it was calculated:</strong><br>
+                • Names: "${name1.charAt(0).toUpperCase() + name1.slice(1)}" + "${name2.charAt(0).toUpperCase() + name2.slice(1)}"<br>
+                • Common letters removed: ${commonCount/2} pairs<br>
+                • Remaining letters: ${remainingCount}<br>
+                • FLAMES position: ${(remainingCount - 1) % 6 + 1} → ${relationship}
+            `;
+            document.getElementById('steps').innerHTML = steps;
+            
+            document.getElementById('result').classList.add('show');
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+        }
+        
+        // Allow Enter key to calculate
+        document.addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                calculateFlames();
+            }
+        });
+    </script>
+</body>
+</html>
