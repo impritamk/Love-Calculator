@@ -19,7 +19,7 @@ $db_server = 'sql111.infinityfree.com';
 $db_username = 'if0_38309488';
 $db_password = '4dA6OJJMzp'; // **KEEP THIS CONFIDENTIAL!**
 $db_name = 'if0_38309488_pritam';
-$table_name = 'pritam';
+$table_name = `flames_results`;
 
 
 try {
