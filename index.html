@@ -239,7 +239,7 @@
     </div>
 
     <script>
-        function calculateFlames() {
+        async function calculateFlames() {
             const name1 = document.getElementById('name1').value.trim().toLowerCase();
             const name2 = document.getElementById('name2').value.trim().toLowerCase();
             
@@ -261,10 +261,10 @@
             for (let i = 0; i < processChars1.length; i++) {
                 for (let j = 0; j < processChars2.length; j++) {
                     if (processChars1[i] === processChars2[j]) {
-                        commonCount += 2; // Count both occurrences
+                        commonCount += 2;
                         processChars1.splice(i, 1);
                         processChars2.splice(j, 1);
-                        i--; // Adjust index after removal
+                        i--;
                         break;
                     }
                 }
@@ -276,31 +276,30 @@
             // FLAMES array
             const flames = ['Friends', 'Love', 'Affection', 'Marriage', 'Enemies', 'Siblings'];
             
+            let relationship, percentage;
+            
             if (remainingCount === 0) {
-                // If no remaining characters, default to Love
-                showResult(flames[1], 100, name1, name2, remainingCount, commonCount);
-                return;
+                relationship = flames[1];
+                percentage = 100;
+            } else {
+                const resultIndex = (remainingCount - 1) % 6;
+                relationship = flames[resultIndex];
+                
+                if (relationship === 'Love' || relationship === 'Marriage') {
+                    percentage = Math.max(75, 100 - (remainingCount * 3));
+                } else if (relationship === 'Affection' || relationship === 'Friends') {
+                    percentage = Math.max(60, 85 - (remainingCount * 2));
+                } else if (relationship === 'Siblings') {
+                    percentage = Math.max(70, 90 - remainingCount);
+                } else {
+                    percentage = Math.max(10, 40 - remainingCount);
+                }
+                
+                percentage = Math.min(100, Math.max(10, percentage));
             }
-            
-            // Calculate FLAMES result using the remaining count
-            const resultIndex = (remainingCount - 1) % 6;
-            const relationship = flames[resultIndex];
-            
-            // Calculate a fun percentage based on various factors
-            let percentage;
-            if (relationship === 'Love' || relationship === 'Marriage') {
-                percentage = Math.max(75, 100 - (remainingCount * 3));
-            } else if (relationship === 'Affection' || relationship === 'Friends') {
-                percentage = Math.max(60, 85 - (remainingCount * 2));
-            } else if (relationship === 'Siblings') {
-                percentage = Math.max(70, 90 - remainingCount);
-            } else { // Enemies
-                percentage = Math.max(10, 40 - remainingCount);
-            }
-            
-            percentage = Math.min(100, Math.max(10, percentage));
             
             showResult(relationship, percentage, name1, name2, remainingCount, commonCount);
+            await saveToDatabase(name1, name2, relationship, percentage);
         }
         
         function showResult(relationship, percentage, name1, name2, remainingCount, commonCount) {
@@ -317,13 +316,12 @@
             document.getElementById('relationshipType').textContent = relationship.toUpperCase();
             document.getElementById('description').textContent = descriptions[relationship];
             
-            // Show calculation steps
             const steps = `
                 <strong>How it was calculated:</strong><br>
                 • Names: "${name1.charAt(0).toUpperCase() + name1.slice(1)}" + "${name2.charAt(0).toUpperCase() + name2.slice(1)}"<br>
                 • Common letters removed: ${commonCount/2} pairs<br>
                 • Remaining letters: ${remainingCount}<br>
-                • FLAMES position: ${(remainingCount - 1) % 6 + 1} → ${relationship}
+                • FLAMES position: ${remainingCount === 0 ? 'Perfect Match' : (remainingCount - 1) % 6 + 1} → ${relationship}
             `;
             document.getElementById('steps').innerHTML = steps;
             
@@ -331,7 +329,35 @@
             document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
         }
         
-        // Allow Enter key to calculate
+        async function saveToDatabase(name1, name2, relationship, percentage) {
+            try {
+                const data = {
+                    name1: name1.charAt(0).toUpperCase() + name1.slice(1),
+                    name2: name2.charAt(0).toUpperCase() + name2.slice(1),
+                    relationship: relationship,
+                    percentage: percentage
+                };
+                
+                const response = await fetch('connect.php', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                if (result.success) {
+                    console.log('Data saved successfully!');
+                } else {
+                    console.error('Error saving data:', result.message);
+                }
+            } catch (error) {
+                console.error('Error connecting to database:', error);
+            }
+        }
+        
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 calculateFlames();
