@@ -15,10 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'OPTIONS') {
 }
 
 // Database configuration - InfinityFree
-$host = 'sql111.infinityfree.com';
-$dbname = 'if0_38309488_pritam';
-$username = 'if0_38309488';     // Change this to your actual username
-$password = '4dA6OJJMzp';    // Change this to your actual password
+$db_server = 'sql111.infinityfree.com';
+$db_username = 'if0_38309488';
+$db_password = '4dA6OJJMzp'; // **KEEP THIS CONFIDENTIAL!**
+$db_name = 'if0_38309488_pritam';
+$table_name = 'pritam';
+
 
 try {
     // Create PDO connection
