@@ -240,13 +240,16 @@
 
     <script>
         async function calculateFlames() {
-            const name1 = document.getElementById('name1').value.trim().toLowerCase();
-            const name2 = document.getElementById('name2').value.trim().toLowerCase();
+            const name1Input = document.getElementById('name1').value.trim();
+            const name2Input = document.getElementById('name2').value.trim();
             
-            if (!name1 || !name2) {
+            if (!name1Input || !name2Input) {
                 alert('Please enter both names!');
                 return;
             }
+            
+            const name1 = name1Input.toLowerCase();
+            const name2 = name2Input.toLowerCase();
             
             // Remove spaces and convert to arrays
             const chars1 = name1.replace(/\s+/g, '').split('');
@@ -298,8 +301,11 @@
                 percentage = Math.min(100, Math.max(10, percentage));
             }
             
+            // Show result first
             showResult(relationship, percentage, name1, name2, remainingCount, commonCount);
-            await saveToDatabase(name1, name2, relationship, percentage);
+            
+            // Then save to database
+            await saveToDatabase(name1Input, name2Input, relationship, percentage);
         }
         
         function showResult(relationship, percentage, name1, name2, remainingCount, commonCount) {
@@ -326,11 +332,12 @@
             document.getElementById('steps').innerHTML = steps;
             
             document.getElementById('result').classList.add('show');
-            document.getElementById('result').scrollIntoView({ behavior: 'smooth' });
+            document.getElementById('result').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
         }
         
         async function saveToDatabase(name1, name2, relationship, percentage) {
             try {
+                // Prepare data
                 const data = {
                     name1: name1.charAt(0).toUpperCase() + name1.slice(1),
                     name2: name2.charAt(0).toUpperCase() + name2.slice(1),
@@ -338,26 +345,34 @@
                     percentage: percentage
                 };
                 
+                console.log('Sending data to database:', data);
+                
+                // Send to PHP file
                 const response = await fetch('connect.php', {
                     method: 'POST',
                     headers: {
-                        'Content-Type': 'application/json'
+                        'Content-Type': 'application/json',
+                        'Accept': 'application/json'
                     },
                     body: JSON.stringify(data)
                 });
                 
+                console.log('Response status:', response.status);
+                
                 const result = await response.json();
+                console.log('Server response:', result);
                 
                 if (result.success) {
-                    console.log('Data saved successfully!');
+                    console.log('✅ Data saved successfully to database! ID:', result.id);
                 } else {
-                    console.error('Error saving data:', result.message);
+                    console.error('❌ Error saving data:', result.message);
                 }
             } catch (error) {
-                console.error('Error connecting to database:', error);
+                console.error('❌ Error connecting to database:', error);
             }
         }
         
+        // Allow Enter key to calculate
         document.addEventListener('keypress', function(e) {
             if (e.key === 'Enter') {
                 calculateFlames();
