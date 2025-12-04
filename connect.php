@@ -8,7 +8,7 @@ header('Access-Control-Allow-Headers: Content-Type');
 $host = 'sql111.infinityfree.com';
 $dbname = 'if0_38309488_pritam';
 $username = 'if0_38309488';     // Change this to your actual username
-$password = 'YOUR_PASSWORD';    // Change this to your actual password
+$password = '4dA6OJJMzp';    // Change this to your actual password
 
 try {
     // Create PDO connection
