@@ -347,8 +347,8 @@
                 
                 console.log('Sending data to database:', data);
                 
-                // Send to PHP file
-                const response = await fetch('connect.php', {
+                // Send to InfinityFree server
+                const response = await fetch('https://pritam.ct.ws/flames/connect.php', {
                     method: 'POST',
                     headers: {
                         'Content-Type': 'application/json',
